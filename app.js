@@ -1,6 +1,8 @@
 require("dotenv").config();
+const cors = require("cors");
 const express = require("express");
 const app = express();
+app.use(cors());
 const http = require("http");
 const server = http.createServer(app);
 const events = require("events");
