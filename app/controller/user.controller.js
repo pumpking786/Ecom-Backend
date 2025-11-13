@@ -1,10 +1,10 @@
 class UserController {
   userProfile = (req, res) => {
-    const { email, name } = req.user;
+    const { email, name, role } = req.user;
 
     res.json({
       status: true,
-      result: { email, name },
+      result: { email, name, role },
       msg: "Profile fetched successfully",
     });
   };
