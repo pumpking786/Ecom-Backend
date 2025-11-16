@@ -51,10 +51,12 @@ class AuthValidation {
     try {
       const userSchema = Joi.object({
         email: Joi.string().email().required().messages({
+          "string.base": "Email is required",
           "string.email": "Please provide a valid email address",
           "any.required": "Email is required",
         }),
         password: Joi.string().required().messages({
+          "string.base": "Password is required",
           "any.required": "Password is required",
         }),
       });

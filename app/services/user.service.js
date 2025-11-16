@@ -117,13 +117,13 @@ class UserService extends DbService {
       // Find user in MongoDB
       const user = await UserModel.findOne({ email });
       if (!user) {
-        throw new Error("Credentials do not match");
+        throw new Error("Email does not match");
       }
 
       // Compare password
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        throw new Error("Credentials do not match");
+        throw new Error("Password do not match");
       }
 
       // Create JWT token
