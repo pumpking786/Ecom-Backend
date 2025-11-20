@@ -39,7 +39,7 @@ class LabelController {
       const id = req.params.id;
       const type = req.params.type;
 
-      const existingLabel = await this.label_srv.getLabelById(id);
+      const existingLabel = await this.label_srv.getLabelById(type, id);
 
       if (req.file) {
         data.image = req.file.filename;
