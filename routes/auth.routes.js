@@ -8,6 +8,6 @@ auth_routes.post("/verify-otp", authCtrl.verifyOtp);
 auth_routes.post("/login", authCtrl.loginUser);
 
 auth_routes.post("/logout", authenticateJWT, authCtrl.logoutUser);
-auth_routes.put("/change-pwd", authCtrl.changepwd);
+// auth_routes.put("/change-pwd", authCtrl.changepwd);
 
 module.exports = auth_routes;

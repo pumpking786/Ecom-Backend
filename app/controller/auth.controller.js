@@ -48,9 +48,9 @@ class AuthController {
     res.json({ status: true, msg: "Logout not implemented" });
   };
 
-  changepwd = (req, res) => {
-    res.json({ status: true, msg: "Password change not implemented" });
-  };
+  // changepwd = (req, res) => {
+  //   res.json({ status: true, msg: "Password change not implemented" });
+  // };
 }
 
 module.exports = AuthController;
