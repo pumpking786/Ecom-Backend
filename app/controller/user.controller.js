@@ -1,5 +1,5 @@
-class MeController {
-  meProfile = (req, res) => {
+class UserController {
+  userProfile = (req, res) => {
     const { email, name, role } = req.user;
 
     res.json({
@@ -9,4 +9,4 @@ class MeController {
     });
   };
 }
-module.exports = MeController;
+module.exports = UserController;
