@@ -1,6 +1,6 @@
 class MeController {
   meProfile = (req, res) => {
-    const { email, name, role } = req.me;
+    const { email, name, role } = req.user;
 
     res.json({
       status: true,

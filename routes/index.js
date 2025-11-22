@@ -4,8 +4,13 @@ const app_routes = express();
 const auth_routes = require("./auth.routes");
 app_routes.use(auth_routes);
 
+const user_routes = require("./user.routes");
+app_routes.use("/user", user_routes);
+// app_routes.use(user_routes);
+
 const me_routes = require("./me.routes");
-app_routes.use(me_routes);
+app_routes.use("/me-profile", me_routes);
+// app_routes.use(me_routes);
 
 const cat_routes = require("./category.routes");
 app_routes.use("/category", cat_routes); // Mount at /category

@@ -150,6 +150,71 @@ class UserService extends DbService {
       throw err;
     }
   };
+  createUserByAdmin = async (data) => {
+    try {
+      this.authValidation.validateRegister(data);
+      // id,id,id=>["id","id","id"]
+
+      const user_obj = new UserModel(data);
+      return await user_obj.save();
+    } catch (err) {
+      console.log("UserStore: ", err);
+      throw new Error(err.message);
+    }
+  };
+  updateUser = async (id, data) => {
+    try {
+      this.authValidation.validateUpdate(data);
+      // id,id,id=>["id","id","id"]
+
+      const user_obj = await UserModel.findByIdAndUpdate(id, data, {
+        new: true,
+      });
+      if (!user_obj) {
+        throw new Error("User not found");
+      }
+      return user_obj;
+    } catch (err) {
+      console.log("UserStore: ", err);
+      throw new Error(err.message);
+    }
+  };
+  deleteUser = async (id) => {
+    try {
+      const user_obj = await UserModel.findByIdAndDelete(id);
+      if (!user_obj) {
+        throw new Error("User Not Found");
+      }
+      return user_obj;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+  // getUserById = async (id) => {
+  //   try {
+  //     const user_obj = await UserModel.findById(id)
+  //       .populate("parent_id")
+  //       .populate("brands");
+  //     if (!user_obj) {
+  //       throw new Error("User Not Found");
+  //     }
+  //     return user_obj;
+  //   } catch (err) {
+  //     throw new Error(err.message);
+  //   }
+  // };
+  getAllCounts = async () => {
+    let all_data = await UserModel.find();
+    return all_data.length;
+  };
+  getUsers = async (id, skip, limit) => {
+    return await UserModel.find({
+      _id: { $ne: id },
+    })
+
+      .skip(skip)
+      .limit(limit);
+  };
 }
 
 module.exports = UserService;
