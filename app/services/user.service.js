@@ -154,8 +154,14 @@ class UserService extends DbService {
     try {
       this.authValidation.validateRegister(data);
       // id,id,id=>["id","id","id"]
+      const existingUser = await UserModel.findOne({ email: data.email });
 
-      const user_obj = new UserModel(data);
+      if (existingUser) {
+        throw new Error("Email already registered");
+      }
+      // Hash password
+      const hashedPassword = await bcrypt.hash(data.password, 10);
+      const user_obj = new UserModel({ ...data, password: hashedPassword });
       return await user_obj.save();
     } catch (err) {
       console.log("UserStore: ", err);
@@ -170,6 +176,60 @@ class UserService extends DbService {
       const user_obj = await UserModel.findByIdAndUpdate(id, data, {
         new: true,
       });
+      if (!user_obj) {
+        throw new Error("User not found");
+      }
+      return user_obj;
+    } catch (err) {
+      console.log("UserStore: ", err);
+      throw new Error(err.message);
+    }
+  };
+  changePassword = async (id, data) => {
+    try {
+      this.authValidation.validateChangePassword(data);
+      // id,id,id=>["id","id","id"]
+
+      // Find user (with password field)
+      const user = await UserModel.findById(id).select("+password");
+      if (!user) {
+        throw new Error("User not found");
+      }
+      // Check if old password is correct
+      const isMatch = await bcrypt.compare(data.oldPassword, user.password);
+      if (!isMatch) {
+        throw new Error("Old password is incorrect");
+      }
+      const hashedPassword = await bcrypt.hash(data.newPassword, 10);
+      const user_obj = await UserModel.findByIdAndUpdate(
+        id,
+        { ...data, password: hashedPassword },
+        {
+          new: true,
+          select: "-password",
+        }
+      );
+      if (!user_obj) {
+        throw new Error("User not found");
+      }
+      return user_obj;
+    } catch (err) {
+      console.log("UserStore: ", err);
+      throw new Error(err.message);
+    }
+  };
+  changePasswordByAdmin = async (id, data) => {
+    try {
+      this.authValidation.validateChangePasswordByAdmin(data);
+      // id,id,id=>["id","id","id"]
+      const hashedPassword = await bcrypt.hash(data.newPassword, 10);
+      const user_obj = await UserModel.findByIdAndUpdate(
+        id,
+        { ...data, password: hashedPassword },
+        {
+          new: true,
+        }
+      );
       if (!user_obj) {
         throw new Error("User not found");
       }

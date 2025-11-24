@@ -134,7 +134,56 @@ class AuthValidation {
       if (response.error) {
         throw new Error(response.error.details[0].message);
       }
-      if (data.password !== data.confirmPassword) {
+      // if (data.password !== data.confirmPassword) {
+      //   throw new Error("Password and Confirm Password do not match");
+      // }
+    } catch (err) {
+      console.error("Validation error:", err.message);
+      throw new Error(err.message);
+    }
+  };
+  validateChangePassword = (data) => {
+    try {
+      const userSchema = Joi.object({
+        oldPassword: Joi.string().min(8).required().messages({
+          "any.required": "Old Password is required",
+        }),
+        newPassword: Joi.string().min(8).required().messages({
+          "string.min": "Password must be at least 8 characters long",
+          "any.required": "New Password is required",
+        }),
+        confirmPassword: Joi.string().required().messages({
+          "any.required": "Confirm password is required",
+        }),
+      });
+      const response = userSchema.validate(data);
+      if (response.error) {
+        throw new Error(response.error.details[0].message);
+      }
+      if (data.newPassword !== data.confirmPassword) {
+        throw new Error("Password and Confirm Password do not match");
+      }
+    } catch (err) {
+      console.error("Validation error:", err.message);
+      throw new Error(err.message);
+    }
+  };
+  validateChangePasswordByAdmin = (data) => {
+    try {
+      const userSchema = Joi.object({
+        newPassword: Joi.string().min(8).required().messages({
+          "string.min": "Password must be at least 8 characters long",
+          "any.required": "Password is required",
+        }),
+        confirmPassword: Joi.string().required().messages({
+          "any.required": "Confirm password is required",
+        }),
+      });
+      const response = userSchema.validate(data);
+      if (response.error) {
+        throw new Error(response.error.details[0].message);
+      }
+      if (data.newPassword !== data.confirmPassword) {
         throw new Error("Password and Confirm Password do not match");
       }
     } catch (err) {

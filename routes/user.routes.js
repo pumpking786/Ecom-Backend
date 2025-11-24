@@ -20,6 +20,17 @@ user_routes.put(
   uploader.single("image"),
   userCtrl.userUpdate
 );
+user_routes.put(
+  "/changePassword/user",
+  authenticateJWT,
+  userCtrl.changePassword
+);
+user_routes.put(
+  "/changePasswordByAdmin/:id",
+  authenticateJWT,
+  isAdmin,
+  userCtrl.changePasswordByAdmin
+);
 user_routes.delete("/:id", authenticateJWT, isAdmin, userCtrl.userDelete);
 user_routes.get("/:id", userCtrl.userGetById);
 user_routes.get("/", authenticateJWT, isAdmin, userCtrl.getUsers);

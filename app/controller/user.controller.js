@@ -50,6 +50,37 @@ class UserController {
       next({ status: 400, msg: except.message });
     }
   };
+  changePassword = async (req, res, next) => {
+    try {
+      let data = req.body;
+
+      let response = await this.user_srv.changePassword(req.user.id, data);
+      res.json({
+        result: response,
+        msg: `Password changed successfully`,
+        status: true,
+      });
+    } catch (except) {
+      console.log("UserStore: ", except);
+      next({ status: 400, msg: except.message });
+    }
+  };
+  changePasswordByAdmin = async (req, res, next) => {
+    try {
+      let data = req.body;
+      const id = req.params.id;
+
+      let response = await this.user_srv.changePasswordByAdmin(id, data);
+      res.json({
+        result: response,
+        msg: `Password changed successfully`,
+        status: true,
+      });
+    } catch (except) {
+      console.log("UserStore: ", except);
+      next({ status: 400, msg: except.message });
+    }
+  };
   userDelete = async (req, res, next) => {
     try {
       const id = req.params.id;
