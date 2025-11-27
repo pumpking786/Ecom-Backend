@@ -7,6 +7,10 @@ const ProductSchemaDef = new mongoose.Schema(
       type: String,
       required: true,
     },
+    description: {
+      type: String,
+      required: false,
+    },
     slug: {
       type: String,
       unique: false,

@@ -80,5 +80,15 @@ class ProductService {
       .skip(skip)
       .limit(limit);
   };
+  deleteImageByName = async (prod_id, image_name) => {
+    let product = ProductModel.findById(prod_id);
+    let all_images = product.images;
+    let index = all_images.indexOf(image_name);
+    if (index >= 0) {
+      all_images.splice(index, 1);
+    }
+    product.images = all_images;
+    return product.save();
+  };
 }
 module.exports = ProductService;

@@ -54,14 +54,17 @@ class ProductController {
       // Check if the authenticated user is the creator
       if (
         existingProduct.created_by &&
-        existingProduct.created_by._id.toString() !== req.user.id
+        existingProduct.created_by._id.toString() !== req.user.id &&
+        !req.user.role === "admin"
       ) {
         throw new Error(
           "Unauthorized: Only the creator can update this product"
         );
       }
       data.images = existingProduct.images;
-      if (req.file) {
+      //data.images=[] //replace all the older image with new images
+
+      if (req.files) {
         req.files.map((item) => {
           data.images.push(item.filename);
         });
@@ -87,7 +90,7 @@ class ProductController {
       }
       data.actual_price =
         Number(data.price) - Number(data.price) * (Number(data.discount) / 100);
-      data.is_featured = !!data.is_featured; //true
+      data.is_featured = data.is_featured == 1 ? true : false; //true
 
       let response = await this.product_srv.updateProduct(id, data);
       res.json({
@@ -108,7 +111,8 @@ class ProductController {
       // Check if the authenticated user is the creator
       if (
         existingProduct.created_by &&
-        existingProduct.created_by._id.toString() !== req.user.id
+        existingProduct.created_by._id.toString() !== req.user.id &&
+        !req.user.role === "admin"
       ) {
         throw new Error(
           "Unauthorized: Only the creator can delete this product"
@@ -164,6 +168,21 @@ class ProductController {
       });
     } catch (except) {
       next({ status: 400, msg: except });
+    }
+  };
+  deleteImageByName = async (req, res, next) => {
+    try {
+      let res = await this.product_srv.deleteImageByName(
+        req.params.product_id,
+        req.params.image
+      );
+      res.json({
+        status: true,
+        result: res,
+        msg: "Image deleted",
+      });
+    } catch (next) {
+      next({ status: 400, msg: "Image could not be deleted." });
     }
   };
 }
