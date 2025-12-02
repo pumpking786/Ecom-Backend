@@ -4,7 +4,6 @@ const uploader = require("../app/middleware/uploader.middleware");
 const router = require("express").Router();
 const CategoryController = require("../app/controller/category.controller");
 const categoryCtrl = new CategoryController();
-
 router
   .route("/")
   .post(
@@ -25,5 +24,7 @@ router
   )
   .delete(authenticateJWT, isAdmin, categoryCtrl.categoryDelete)
   .get(categoryCtrl.categoryGetById);
+
+router.get("/active/only", categoryCtrl.getActiveCats);
 
 module.exports = router;

@@ -30,6 +30,10 @@ require("./config/mongoose.config");
 const routes = require("./routes/");
 
 app.use("/assets", express.static("public/"));
+
+app.set("view engine", "pug");
+app.set("views", process.cwd() + "/views");
+
 app.use(express.json());
 app.use(
   express.urlencoded({

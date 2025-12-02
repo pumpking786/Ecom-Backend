@@ -128,5 +128,17 @@ class CategoryController {
       next({ status: 400, msg: except });
     }
   };
+  getActiveCats = async (req, res, next) => {
+    try {
+      let response = await this.category_srv.getAllActiveCats("active");
+      res.json({
+        result: response,
+        status: true,
+        msg: "Active Categories Fetched",
+      });
+    } catch (error) {
+      next({ status: 400, msg: error });
+    }
+  };
 }
 module.exports = CategoryController;

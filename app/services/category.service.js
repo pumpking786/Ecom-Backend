@@ -70,5 +70,15 @@ class CategoryService {
       .skip(skip)
       .limit(limit);
   };
+  getAllActiveCats = async (status) => {
+    try {
+      let response = await CategoryModel.find({ status: status })
+        .populate("parent_id")
+        .populate("brands");
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
 }
 module.exports = CategoryService;
