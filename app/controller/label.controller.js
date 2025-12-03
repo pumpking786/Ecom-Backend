@@ -94,13 +94,11 @@ class LabelController {
   };
   getLabels = async (req, res, next) => {
     try {
-      const type = req.params.type;
-
       //total_count=101
       // per_page=10
       //total_page=11
       let paginate = {
-        total_count: await this.label_srv.getAllCounts(type),
+        total_count: await this.label_srv.getAllCounts(req.params.type),
         per_page: req.query.per_page ? parseInt(req.query.per_page) : 10,
         current_page: req.query.page ? parseInt(req.query.page) : 1,
       };
@@ -109,7 +107,43 @@ class LabelController {
       //2=>10-19,10,
       //3=>20-29=>20
       let skip = (paginate.current_page - 1) * paginate.per_page;
-      let data = await this.label_srv.getLabels(type, skip, paginate.per_page);
+      let data = await this.label_srv.getLabels(
+        { type: req.params.type },
+        skip,
+        paginate.per_page
+      );
+      res.json({
+        result: data,
+        status: true,
+        paginate: paginate,
+        msg: "Data fetched",
+      });
+    } catch (except) {
+      next({ status: 400, msg: except });
+    }
+  };
+  getActiveLabels = async (req, res, next) => {
+    try {
+      // const type = req.params.type;
+
+      //total_count=101
+      // per_page=10
+      //total_page=11
+      let paginate = {
+        total_count: await this.label_srv.getAllCounts(req.params.type),
+        per_page: req.query.per_page ? parseInt(req.query.per_page) : 10,
+        current_page: req.query.page ? parseInt(req.query.page) : 1,
+      };
+      //100=>
+      //1,0-9=>0,
+      //2=>10-19,10,
+      //3=>20-29=>20
+      let skip = (paginate.current_page - 1) * paginate.per_page;
+      let data = await this.label_srv.getLabels(
+        { type: req.params.type, status: "active" },
+        skip,
+        paginate.per_page
+      );
       res.json({
         result: data,
         status: true,

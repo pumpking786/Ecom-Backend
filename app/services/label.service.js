@@ -64,10 +64,7 @@ class LabelService {
     let all_data = await LabelModel.find(filter);
     return all_data.length;
   };
-  getLabels = async (type, skip, limit) => {
-    let filter = {
-      type: type,
-    };
+  getLabels = async (filter, skip, limit) => {
     return await LabelModel.find(filter).skip(skip).limit(limit);
   };
 }

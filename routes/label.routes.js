@@ -13,6 +13,9 @@ const validateType = (req, res, next) => {
     next({ status: 404, msg: "Resource not found" });
   }
 };
+
+label_routes.get("/:type/active", labelCtrl.getActiveLabels);
+
 label_routes.post(
   "/:type",
   validateType,
