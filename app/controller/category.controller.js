@@ -1,10 +1,12 @@
 const slugify = require("slugify");
 
 const CategoryService = require("../services/category.service");
+const ProductService = require("../services/product.service");
 const { statusSchema } = require("../model/commom.schema");
 class CategoryController {
   constructor() {
     this.category_srv = new CategoryService();
+    this.product_srv = new ProductService();
   }
   categoryStore = async (req, res, next) => {
     try {
@@ -136,6 +138,27 @@ class CategoryController {
         status: true,
         msg: "Active Categories Fetched",
       });
+    } catch (error) {
+      next({ status: 400, msg: error });
+    }
+  };
+  getProductByCatSlug = async (req, res, next) => {
+    try {
+      console.log(req.params.slug);
+
+      let cat_slug = req.params.slug;
+      let response = await this.category_srv.getCatByFilter({ slug: cat_slug });
+      if (response) {
+        let category = response[0];
+        let products = await this.product_srv.getProductByCatId(category._id);
+        res.json({
+          result: { category, products },
+          status: true,
+          msg: "Product fetched",
+        });
+      } else {
+        throw response;
+      }
     } catch (error) {
       next({ status: 400, msg: error });
     }

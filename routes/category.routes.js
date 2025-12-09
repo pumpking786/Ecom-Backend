@@ -4,6 +4,9 @@ const uploader = require("../app/middleware/uploader.middleware");
 const router = require("express").Router();
 const CategoryController = require("../app/controller/category.controller");
 const categoryCtrl = new CategoryController();
+
+router.get("/slug/:slug", categoryCtrl.getProductByCatSlug);
+
 router
   .route("/")
   .post(

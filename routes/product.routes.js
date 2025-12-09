@@ -9,6 +9,8 @@ const router = require("express").Router();
 const ProductController = require("../app/controller/product.controller");
 const productCtrl = new ProductController();
 
+router.get("/slug/:slug", productCtrl.getProductBySlug);
+
 router
   .route("/")
   .post(

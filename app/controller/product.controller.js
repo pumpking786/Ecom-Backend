@@ -142,6 +142,20 @@ class ProductController {
       next({ status: 400, msg: except.message });
     }
   };
+  getProductBySlug = async (req, res, next) => {
+    try {
+      const slug = req.params.slug;
+
+      let response = await this.product_srv.getProductBySlug(slug);
+      res.json({
+        result: response,
+        msg: `Data fetched`,
+        status: true,
+      });
+    } catch (except) {
+      next({ status: 400, msg: except.message });
+    }
+  };
   getProducts = async (req, res, next) => {
     try {
       const type = req.params.type;
