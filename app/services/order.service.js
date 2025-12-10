@@ -111,7 +111,7 @@ class OrderService {
         // sub_total += item_total;
       });
       return {
-        result: { cart },
+        result: cart,
         //if subtotal want to do with bend, uncomment
         status: true,
         msg: "Cart Detail",
