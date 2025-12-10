@@ -82,6 +82,44 @@ class OrderService {
       throw new Error(err.message || "Error creating order");
     }
   };
+  getCartDetail = async (data) => {
+    try {
+      let cart = [];
+      // let sub_total = 0;
+      let cart_product_ids = data.cart.map((item) => item.product_id);
+      let cart_product = await ProductModel.find({
+        _id: {
+          $in: cart_product_ids,
+        },
+      });
+      cart_product.map((prod) => {
+        let curr_qty = 0;
+        data.cart.map((item) => {
+          if (prod._id.equals(item.product_id)) {
+            curr_qty = Number(item.qty);
+          }
+        });
+        let item_total = curr_qty * prod.actual_price;
+        let single_item = {
+          product_id: prod._id,
+          product_name: prod.name,
+          actual_price: prod.actual_price,
+          qty: curr_qty,
+          total_amt: item_total,
+        };
+        cart.push(single_item);
+        // sub_total += item_total;
+      });
+      return {
+        result: { cart },
+        //if subtotal want to do with bend, uncomment
+        status: true,
+        msg: "Cart Detail",
+      };
+    } catch (err) {
+      throw err;
+    }
+  };
 }
 
 module.exports = OrderService;

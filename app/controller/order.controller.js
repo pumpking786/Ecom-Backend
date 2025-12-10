@@ -12,5 +12,13 @@ class OrderController {
       next({ status: 400, msg: except.msg });
     }
   };
+  getCartDetail = async (req, res, next) => {
+    try {
+      const response = await this.order_srv.getCartDetail(req.body);
+      res.json(response);
+    } catch (except) {
+      next({ status: 400, msg: except.msg });
+    }
+  };
 }
 module.exports = OrderController;
