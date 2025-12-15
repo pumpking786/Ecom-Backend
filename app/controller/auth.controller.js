@@ -7,7 +7,12 @@ class AuthController {
 
   registerUser = async (req, res, next) => {
     try {
-      const response = await this.user_svc.createUser(req.body);
+      let data = req.body; // Initialize with request body or {...req.body}
+
+      if (req.file) {
+        data.image = req.file.filename;
+      }
+      const response = await this.user_svc.createUser(data);
       res.json(response);
     } catch (err) {
       console.error("Register error:", err.message);
