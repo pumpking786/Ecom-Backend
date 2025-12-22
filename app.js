@@ -65,3 +65,21 @@ server.listen(3000, "localhost", (err) => {
     console.log("Press CTRL+C to disconnect server");
   }
 });
+// ✅ Graceful shutdown
+const shutdown = () => {
+  console.log("\nGracefully shutting down...");
+  server.close(() => {
+    console.log("Closed out remaining connections.");
+    process.exit(0);
+  });
+
+  // Force shutdown after 10 seconds
+  setTimeout(() => {
+    console.error("Forcefully shutting down...");
+    process.exit(1);
+  }, 10000);
+};
+
+// Handle termination signals
+process.on("SIGTERM", shutdown);
+process.on("SIGINT", shutdown);
